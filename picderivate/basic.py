@@ -1,3 +1,5 @@
+#! /usr/bin/env python3
+
 '''
 Created on Sep 4, 2012
 
@@ -8,11 +10,13 @@ from time import sleep
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
+from  matplotlib.animation import FuncAnimation
 
 #canvasb size setup
-dpi = 513
+dpi = 512
 inches = np.array([1, 1])
 dots = dpi * inches
+#dots += np.array([0, 1])
 
 #======Initial Pic Setup=================
 #draw 2d zero matrix
@@ -21,9 +25,9 @@ if True:
 
 #draw square
 if False:
-    rect = (100, 100)
+    rect = (100, 200)
     amplitude = 240  # of color
-    shift = (0, 0)
+    shift = (0, 20)
 
     edgeNear = (dots - rect) / 2 + shift
     edgeFar = (dots + rect) / 2 + shift
@@ -44,9 +48,9 @@ fig = plt.figure(figsize=[inches[1], inches[0]], dpi=dpi)
 im = plt.figimage(imageIn)
 
 plt.ion()
-plt.show()
 
-for i in range(10000):
+def update(i):
+    global imageIn
     imageShift = np.roll(imageIn, 1, 0)
     imageOut = (imageShift - imageIn)
     imageShift = np.roll(imageIn, -1, 0)
@@ -58,5 +62,8 @@ for i in range(10000):
     imageIn = imageOut
     im.set_array(imageOut)
 
-    #sleep(5) #optionaly slow down the loop a bit
-    plt.draw()
+    #sleep(1) #optionaly slow down the loop a bit
+
+animation = FuncAnimation(fig, update, interval=1)
+plt.show()
+
