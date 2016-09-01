@@ -16,7 +16,7 @@ from  matplotlib.animation import FuncAnimation
 dpi = 512
 inches = np.array([1, 1])
 dots = dpi * inches
-#dots += np.array([0, 1])
+#dots += np.array([0, -111])
 
 #======Initial Pic Setup=================
 #draw 2d zero matrix
@@ -25,9 +25,9 @@ if True:
 
 #draw square
 if False:
-    rect = (100, 200)
-    amplitude = 240  # of color
-    shift = (0, 20)
+    rect = (20, 350)
+    amplitude = 255  # of color
+    shift = (0, 0)
 
     edgeNear = (dots - rect) / 2 + shift
     edgeFar = (dots + rect) / 2 + shift
@@ -36,34 +36,42 @@ if False:
 #set this one to true to initiate it with an image
 if False:
     imageIn = np.uint8(255 * mpimg.imread('t.png'))
+    imageIn = np.uint8(255 * mpimg.imread('mario.png'))
 
 #draw single pixel
 if True:
-    amplitude = 100   # of color
+    amplitude = 150   # of color
     imageIn[(dots[0] - 1) / 2, (dots[1] - 1) / 2] = amplitude
+
+#give an exact array
+if False:
+    imageIn=np.array([[ 128, 128,   0, 128, 128,   0, 128, 128,   0, 128, 128,   0, 128, 128,   0, 128, 128,   0, 128, 128,   0, 128, 128,   0],
+                      [ 128,   0, 128, 128,   0, 128, 128,   0, 128, 128,   0, 128, 128,   0, 128, 128,   0, 128, 128,   0, 128, 128,   0, 128],
+                      [   0, 128, 128,   0, 128, 128,   0, 128, 128,   0, 128, 128,   0, 128, 128,   0, 128, 128,   0, 128, 128,   0, 128, 128],
+                      [ 128, 128,   0, 128, 128,   0, 128, 128,   0, 128, 128,   0, 128, 128,   0, 128, 128,   0, 128, 128,   0, 128, 128,   0],                     
+                      [ 128,   0, 128, 128,   0, 128, 128,   0, 128, 128,   0, 128, 128,   0, 128, 128,   0, 128, 128,   0, 128, 128,   0, 128],
+                      [   0, 128, 128,   0, 128, 128,   0, 128, 128,   0, 128, 128,   0, 128, 128,   0, 128, 128,   0, 128, 128,   0, 128, 128]],dtype=np.uint8)
+
 #==========================================
 
 #setup the figure
 fig = plt.figure(figsize=[inches[1], inches[0]], dpi=dpi)
 im = plt.figimage(imageIn)
 
-plt.ion()
+# plt.ion()
 
 def update(i):
     global imageIn
-    imageShift = np.roll(imageIn, 1, 0)
-    imageOut = (imageShift - imageIn)
-    imageShift = np.roll(imageIn, -1, 0)
-    imageOut = imageOut + (imageShift - imageIn)
-    imageShift = np.roll(imageIn, 1, 1)
-    imageOut = imageOut + (imageShift - imageIn)
-    imageShift = np.roll(imageIn, -1, -1)
-    imageOut = imageOut + (imageShift - imageIn)
+    imageOut = np.roll(imageIn, 1, 0) - imageIn
+    imageOut += np.roll(imageIn, -1, 0) - imageIn
+    imageOut += np.roll(imageIn, 1, 1) - imageIn
+    imageOut += np.roll(imageIn, -1, -1) - imageIn
     imageIn = imageOut
     im.set_array(imageOut)
 
-    #sleep(1) #optionaly slow down the loop a bit
-
+    sleep(.051) #optionaly slow down the loop a bit
+    # print(imageIn)
 animation = FuncAnimation(fig, update, interval=1)
+print('end')
 plt.show()
 

@@ -88,8 +88,8 @@ class plotter:
         self.imageOut = self.imageOut + (self.imageShift - self.imageIn)
         self.imageIn = self.imageOut
 
-        #print(2 ** self.speed)
-        #sleep(2 ** self.speed)
+        print(2 ** self.speed)
+        sleep(2 ** self.speed)
 
         self.fig.canvas.draw()
         self.im.set_array(self.imageIn)
